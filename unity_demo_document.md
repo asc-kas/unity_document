@@ -1,8 +1,4 @@
-# unity_document
-unity接入文档
-
-
-# ASCSDK文档(ASCSDK Document)
+# ASCSDK（Unity）文档(ASCSDK Unity Document)
 
 ------
 ###简介(Introduction)
@@ -201,6 +197,8 @@ PS: set the horizontal screen manually according to the requirements of the game
 > * 支付（pay）
 ##### 支付（pay）
 
+    int [] DefaultPrice=new [3]{6,10,20};//示例：默认所有道具价格（Default all prop prices）
+    int [] DefaultQuantity=new [3]{60,100,200};//示例：默认道具对应的数量（Default all props price corresponding to the number）
     void Start()
     {
         //初始化
@@ -214,6 +212,16 @@ PS: set the horizontal screen manually according to the requirements of the game
         //上传游戏数据（补单用，必须）
         //Upload game data
         SubmitGameDataAfferent(ASCExtraGameData.TYPE_ENTER_GAME);
+        //示例：获取后台价格及数据,如果没有,则使用默认价格.
+        //Get background price and data,If not, use the default price
+        if (ASCSDKInterface.Instance.PointConfig != null && ASCSDKInterface.Instance.PointConfig.Count > 0)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				DefaultPrice[i] = ASCSDKInterface.Instance.PointConfig[i].Price;
+				DefaultQuantity[i] = ASCSDKInterface.Instance.PointConfig[i].Quantity;
+			}
+		}
     }
     
     //支付回调(pay callback)
@@ -231,12 +239,12 @@ PS: set the horizontal screen manually according to the requirements of the game
     
     //支付
     //pay
-    void OnPayClick()
+    void OnPayClick(int price,int productId)
     {
         ASCPayParams data = new ASCPayParams();
         //游戏中商品ID（必须(Need)）
         //Product ID  in the game (Need)
-        data.productId = "1";
+        data.productId = productId.ToString();
         //游戏中商品名称，比如元宝，钻石...（必须(Need)）
         //The names of products in the game, such as yuan bao, diamonds...(Need)
         data.productName = "元宝";
@@ -245,7 +253,7 @@ PS: set the horizontal screen manually according to the requirements of the game
         data.productDesc = "购买100元宝，赠送20元宝";
         //价格，单位为元
         //Price, in yuan
-        data.price = 1;
+        data.price = price;
         //购买数量,定值为1（必须(Need)）
         // purchase quantity, set as 1 (Need))
         data.buyNum = 1;
@@ -352,10 +360,10 @@ PS: set the horizontal screen manually according to the requirements of the game
     
     //礼包兑换回调实现
     //Gift bag for
-    void OnGetGiftInfo(int propNumber, string msg)
+    void OnGetGiftInfo(int propNumber, string msg, GiftBagType type)
     {
-        //propNumber为下发的道具数量，msg为状态信息（若为0，则道具下发失败）
-        //PropNumber is the number of props sent, and MSG is the status information (if it is 0, the propNumber fails to be sent).
+        //propNumber为下发的道具数量，msg为状态信息（若为0，则道具下发失败）,type 是道具类型（金币，钻石，其他）
+        //PropNumber is the number of props sent down, MSG is the status information (if it is 0, the prop sent down fails), and type is the prop type (gold coin, diamond, others).
     }
 
 ### 注意事项(Matters needing attention)
@@ -413,6 +421,6 @@ Package Android applications, switch to Android platform in build Settings, buil
 
 
 火星人互娱有限公司 [@huoxingren]     
-2018 年 07月 31日    
+2018 年 08月 9日    
 
 
