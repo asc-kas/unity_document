@@ -347,8 +347,23 @@ PS: set the horizontal screen manually according to the requirements of the game
     //evaluate
     void OnEvaluationClick()
     {
-        ASCSDKInterface.Instance.Evaluation();
+        //允许评价
+		//Allows the evaluation of
+		if (ASCSDKInterface.Instance.GetRateFlag())
+		{
+			//展示自己的五星好评界面,如果玩家确认给评价，则调用OnEvaluation()；
+			Show your five-star praise interface, and call OnEvaluation() if the player confirms the evaluation.
+		}
     }
+    
+    //跳转到渠道评价界面
+    void OnEvaluation()
+    {
+            //在界面中玩家点击了确定调用此方法
+			//In the interface, the user clicks ok to call this method
+			ASCSDKInterface.Instance.Evaluation();
+    }
+    
     
     //兑换礼包(若cdkey为0，则调用sdk的输入界面)
     //Cash gift bag，If cdkey is 0, the input interface of the SDK is called
